@@ -1,14 +1,24 @@
+# LOCK VERSIONS OF KERAS AND TENSORFLOW TO 2.12.1
+
 import pandas as pd
+import os
+import kagglehub
+
+path = kagglehub.dataset_download("uciml/iris")
+print("Path to dataset files:", path)
+csv_path = os.path.join(path, "Iris.csv")
+
 from keras.models import Sequential
 from keras.layers import Dense
 from keras.utils import to_categorical
 from sklearn.preprocessing import LabelEncoder
 
-dataframe = pd.read_csv("iris.csv", header=None)
+dataframe = pd.read_csv(csv_path)
+print(dataframe.head())
 dataset = dataframe.values
 
-X = dataset[:, 0:4].astype(float)
-Y = dataset[:, 4]
+X = dataset[:, 1:5].astype(float)
+Y = dataset[:, 5]
 
 encoder = LabelEncoder()
 encoder.fit(Y)
@@ -29,8 +39,8 @@ model.compile(
 history = model.fit(
     X,
     dummy_y,
-    epochs=150,
-    batch_size=10,
+    epochs=300,
+    batch_size=30,
     validation_split=0.2,
     verbose=1
 )
