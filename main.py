@@ -4,7 +4,7 @@ from keras.layers import Dense
 from keras.utils import to_categorical
 from sklearn.preprocessing import LabelEncoder
 
-dataframe = pd.read_csv("iris.csv", eader=None)
+dataframe = pd.read_csv("iris.csv", header=None)
 dataset = dataframe.values
 
 X = dataset[:, 0:4].astype(float)
@@ -21,17 +21,17 @@ model.add(Dense(8, input_dim=4, activation="relu"))
 model.add(Dense(3, activation="softmax"))
 
 model.compile(
-    optimizer = "adam",
-    loss = "categorical_crossentropy",
-    merics=["accuracy"]
+    optimizer="adam",
+    loss="categorical_crossentropy",
+    metrics=["accuracy"]
 )
 
 history = model.fit(
     X,
     dummy_y,
-    epochs = 150,
-    batch_size = 10,
-    validation_split = 0.2,
-    verbose = 1
+    epochs=150,
+    batch_size=10,
+    validation_split=0.2,
+    verbose=1
 )
 
