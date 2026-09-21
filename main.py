@@ -1,13 +1,22 @@
-# LOCK VERSIONS OF KERAS AND TENSORFLOW TO 2.12.1
+# switch to plaidml-keras (optimise for university PCs)
+# ХАК ДЛЯ СОВМЕСТИМОСТИ PYTHON 3.10+ И СТАРОГО KERAS
+import collections
+import sys
+if sys.version_info >= (3, 10):
+    import collections.abc
+    collections.Iterable = collections.abc.Iterable
+# --------------------------------------------------
 
-import pandas as pd
 import os
+
+os.environ["KERAS_BACKEND"] = "plaidml.keras.backend"
 import kagglehub
 
 path = kagglehub.dataset_download("uciml/iris")
 print("Path to dataset files:", path)
 csv_path = os.path.join(path, "Iris.csv")
 
+import pandas as pd
 from keras.models import Sequential
 from keras.layers import Dense
 from keras.utils import to_categorical
@@ -39,9 +48,8 @@ model.compile(
 history = model.fit(
     X,
     dummy_y,
-    epochs=300,
-    batch_size=30,
+    epochs=500,
+    batch_size=64,
     validation_split=0.2,
     verbose=1
 )
-
