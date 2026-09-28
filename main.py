@@ -45,6 +45,44 @@ def build_model(hidden, activation, optimizer):
               metrics=["accuracy"])
     return m
 
+class LivePlotCallback(Callback):
+    """
+    Keras calls on_epoch_end automatically
+    """
+    def __init__(self, app, line_acc, line_loss):
+        super().__init__()
+        self.app = app
+        self.line_acc = line_acc
+        self.line_loss = line_loss
+        self.xs = []
+        self.acc = []
+        self.loss = []
+        self.redraw_every = 5
+
+    def on_epoch_end(self, epoch, logs=None):
+        logs = logs or {}
+
+        val_acc = logs.get("val_accuracy")
+        val_loss = logs.get("val_loss")
+
+        if val_acc is None or val_loss is None:
+            return
+
+        self.xs.append(epoch + 1)
+        self.acc.append(val_acc)
+        self.loss.append(val_loss)
+
+
+        self.line_acc.set_data(self.xs, self.acc)
+        self.line_loss.set_data(self.xs, self.loss)
+
+        if (epoch + 1) % self.redraw_every == 0:
+            self.app.ax_acc.relim()
+            self.app.ax_acc.autoscale_view()
+            self.app.ax_loss.relim()
+            self.app.ax_loss.autoscale_view()
+            self.app.canvas.draw_idle()
+            self.app.root.update_idletasks()
 
 class App:
     def __init__(self, root):
