@@ -71,7 +71,6 @@ class App:
         self.test_size    = self._field(params, "test_size",    "0.2", 0)
         self.val_size     = self._field(params, "val_size",     "0.2", 1)
         self.random_state = self._field(params, "random_state", "42",  2)
-        self.
 
         # конфиги
         cfg_box = ttk.LabelFrame(
