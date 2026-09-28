@@ -1,6 +1,8 @@
 # switch to plaidml-keras (optimise for university PCs)
 # ХАК ДЛЯ СОВМЕСТИМОСТИ PYTHON 3.10+ И СТАРОГО KERAS
 import collections
+import numpy as np
+import matplotlib.pyplot as plt
 import sys
 if sys.version_info >= (3, 10):
     import collections.abc
@@ -8,10 +10,9 @@ if sys.version_info >= (3, 10):
 # --------------------------------------------------
 
 import os
-
 os.environ["KERAS_BACKEND"] = "plaidml.keras.backend"
-import kagglehub
 
+import kagglehub
 path = kagglehub.dataset_download("uciml/iris")
 print("Path to dataset files:", path)
 csv_path = os.path.join(path, "Iris.csv")
@@ -21,6 +22,8 @@ from keras.models import Sequential
 from keras.layers import Dense
 from keras.utils import to_categorical
 from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import confusion_matrix, classification_report
 
 dataframe = pd.read_csv(csv_path)
 print(dataframe.head())
