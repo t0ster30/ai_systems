@@ -76,3 +76,32 @@ def plot_training_history(history, title):
 
 
 plot_training_history(history_base, 'Базовая модель (5 эпох)')
+
+
+def create_improved_model():
+    model = Sequential()
+    model.add(layers.Flatten(input_shape=(28, 28)))
+    model.add(layers.Dense(512, activation='relu'))
+    model.add(layers.Dense(10, activation='softmax'))
+    model.compile(optimizer='adam',
+                       loss='categorical_crossentropy',
+                       metrics=[metrics.Accuracy(), metrics.Precision()])
+    return model
+
+
+model_improved = create_improved_model()
+history_improved = model_improved.fit(train_images, train_labels_one_hot,
+                              epochs=20,
+                              batch_size=128,
+                              validation_data=(test_images, test_labels_one_hot),
+                              verbose=1)
+test_loss_imp, test_accuracy_imp, *z = model_base.evaluate(test_images, test_labels_one_hot, verbose=0)
+print(f'\n--- Оценка улучшенной модели на тестовых данных ---')
+print(f'Точность (Accuracy): {test_accuracy_imp*100:.2f}%')
+
+plot_training_history(history_improved, 'Улучшенная модель (20 эпох)')
+
+if test_accuracy_imp >= 0.95:
+    print('\nЦель достигнута: точность >= 95%')
+else:
+    print(f'\n Цель не достигнута. Текущая точность: {test_loss_imp*100:.2f}%. Продолжайте экспериментировать!')
